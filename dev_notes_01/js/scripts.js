@@ -11,8 +11,14 @@ function showNotes() {
    });
 };
 
+function cleanNotes() {
+   notesContainer.replaceChildren([]);
+}
+
 function addNote() {
     const notes = getNotes();
+
+    const noteInput = document.querySelector("#note-content");
 
    const noteObject = {
     id: generateId(),
@@ -52,8 +58,27 @@ function createNote(id, content, fixed) {
 
     element.appendChild(pinIcon);
 
+    if(fixed) {
+      element.classList.add("fixed");
+    }
+
+    element.querySelector(".bi-pin").addEventListener("click", () => {
+      toggleFixNote(id);
+    });
+
     return element;
 };
+
+function toggleFixNote(id) {
+   const notes = getNotes();
+
+   const targetNote = notes.filter((note) => note.id === id)[0];
+
+   targetNote.fixed = !targetNote.fixed;
+
+   saveNotes(notes);
+   showNotes();
+}
 
 // Local storage
 function getNotes() {
